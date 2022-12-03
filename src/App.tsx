@@ -5,8 +5,6 @@ import Quotes from "./containers/Quotes/Quotes";
 import NewQuote from "./containers/NewQuote/NewQuote";
 import EditQuote from "./containers/EditQuote/EditQuote";
 
-
-
 function App() {
   return (
     <>
