@@ -1,12 +1,28 @@
 import React from 'react';
 import {QuoteType} from "../../types";
+import axiosApi from "../../axiosApi";
+import {Link, useLocation} from "react-router-dom";
 
 interface Props {
   quote: QuoteType;
+  fetch: (link: string) => void;
 }
 
 
-const Quote: React.FC<Props> = ({quote}) => {
+const Quote: React.FC<Props> = ({quote, fetch}) => {
+  const location = useLocation();
+  const deleteQuote = async () => {
+    try {
+      await axiosApi.delete('/' + quote.id + '.json');
+      if (location.pathname === '/') {
+        await fetch('.json');
+      } else {
+        await fetch('.json?orderBy="category"&equalTo="' + quote.category + '"');
+      }
+    } finally {
+
+    }
+  }
   return (
     <div className="p-2 border border-dark border-2 mb-4 row">
       <div className="col-10">
@@ -14,7 +30,7 @@ const Quote: React.FC<Props> = ({quote}) => {
         <p className="m-0">&mdash; {quote.author}</p>
       </div>
       <div className="col-2 row">
-        <span className="col-5 me-1">
+        <Link to={"/quotes/" + quote.id + '/edit'} className="col-5 me-1">
           <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
                className="bi bi-pencil-square" viewBox="0 0 16 16">
           <path
@@ -22,8 +38,8 @@ const Quote: React.FC<Props> = ({quote}) => {
           <path
                 d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
         </svg>
-        </span>
-        <span className="col-5">
+        </Link>
+        <span className="col-5" onClick={deleteQuote}>
           <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-trash"
                viewBox="0 0 16 16">
           <path
